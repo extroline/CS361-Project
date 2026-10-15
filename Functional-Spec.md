@@ -26,3 +26,19 @@ Rodney's Bike Shop system  allows clients to reserve a bike(s) as well the clien
 
 ## Use Case Diagram 
 ![Use Case Diagram](use_case_1.drawio.png)
+
+
+## UX Flows
+![UX Flow 1](UX-Flow1.png)
+![UX Flow 2](UX-Flow2.png)
+![UX Flow 3](UX-Flow3.png)
+
+## WireFrames 
+![MySpace Ad](MySpace%20Feed.png)
+![Bike List](Bike%20List.png)
+![Bike Detail](Bike%20Details.png)
+![Rental Cart](Rental%20Cart.png)
+![Guest Checkout](Guest%20Checkout.png)
+![Card Payment](Card%20Payment.png)
+![Paypal Review](Paypal%20Review.png)
+![Rental Page](Rental%20Confirmed.png)
