@@ -1,7 +1,7 @@
 # Functional Spec : Rodney Ridealot'
 
 ## Highlevel Goal 
-Rodney's Bike Shop system  allows clients to reserve a bike(s) as well the client should be able to pay for it online. The staff should be able to list bikes for reservation, set prices, and put bikes into maintence as needed. 
+Rodney's Bike Shop system allows clients to reserve a bike(s) as well the client should be able to pay for it online. The staff should be able to list bikes for reservation, set prices, and put bikes into maintence as needed. 
 
 ## User Scenarios
 1. Zero to 100 : Barry Allen a lonely chap has been caught up in his my space doomscrolling phase again. In this fury of scrolling up and down the site on the side an ad flicks up. Mentioning "Tired of seeing two wheels on the screen and not underneath your two come rent a pair of wheels"! Without missing a beat he clicks the page delivering  him to Rodeney's site. A colorful vibrant site with models of bikes, prices, and bikes available to rent. Barry a hasty man clicks on the EXTREME MOUNTAIN SLAYER and NEEDS it in his life. He HATES signing up for everything. So when Barry selects the day he wants it. And adds the bike to cart. If the next is a forced sign up page without letting the user quick checkout with paypal or put his credit card information in and only give a phone number. CONSIDER that SALE like a sail in the wind GONE.  
