@@ -90,6 +90,171 @@ flowchart LR
 | Update Inventory | Pulls from the employee dashboard and informs the kisok of any new changes made to the website or stock of bikes for rent|
 
 
+## Data Model
+
+
+### Entity Relationship Diagram
+``` mermaid 
+erDiagram
+    direction TB
+    Customer {
+        int customer_id PK
+        string name
+        string email
+        int transaction_id FK "References OnlineWebsite.transaction_id"
+        int transaction_id FK "References Kisosk.transaction_id"
+
+    }
+
+    Kisosk {
+        int customer_id FK "References Customer.customer_id"
+        string name
+        int kisok_num PK
+        string email
+        int transaction_id 
+    }
+
+    Employee {
+        int employee_id PK
+        bool CheckedBike 
+    }
+
+    OnlineWebsite {
+        int customer_id FK "References Customer.customer_id"
+        string name
+        string email
+        int ip_address PK
+        int transaction_id 
+    }
+
+    RentedBike {
+        int customer_id FK "References Customer.customer_id"
+        string name
+        bool CheckedBike FK "References Employee.CheckedBike"
+
+    }
+    Employee ||..o{ RentedBike : "referenced by"
+
+    Customer ||..o{ Kisosk : "referenced by"
+    Customer ||..o{ OnlineWebsite : "referenced by"
+    Customer ||..o{ RentedBike : "referenced by"
+```
+
+
+
+
+### Class Diagram
+``` mermaid
+classDiagram
+    direction TB
+
+    class Customer {
+        int customer_id
+        string name
+        string email
+        int website_transaction_id
+        int kiosk_transaction_id
+    }
+
+    class Kisosk {
+        int customer_id
+        string name
+        int kisok_num
+        string email
+        int transaction_id
+    }
+
+    class Employee {
+        int employee_id
+        bool CheckedBike
+    }
+
+    class OnlineWebsite {
+        int customer_id
+        string name
+        string email
+        int ip_address
+        int transaction_id
+    }
+
+    class RentedBike {
+        int customer_id
+        string name
+        bool CheckedBike
+    }
+
+    Employee "1" -- "0..*" RentedBike : checks
+    Customer "1" -- "0..*" Kisosk : uses
+    Customer "1" -- "0..*" OnlineWebsite : uses
+    Customer "1" -- "0..*" RentedBike : rents
+```
+## Interfaces
+``` python
+printReceipt(transactionID: TransID, Customer_name: Name,) -> printed
+```
+
+| Row | Meaning |
+|---|---|
+| **Purpose** | Prints the receipt  |
+| **Requires** | Must have a transaction ID and a name for the custome  |
+| **Outcomes** | Approved : Prints the receipt Declined : No ID or No Name does not print|
+| **Guarantees** | The transaction ID must be vaild if it prints or it doesn't |
+| **Notes** | This is not required if the client does not want the receipt  |
+
+``` python
+logTransaction(transactionID: TransID, Customer_name: Name,) -> Transaction_Log_DB
+```
+
+| Row | Meaning |
+|---|---|
+| **Purpose** | Sends the client information to the transcation database|
+| **Requires** | Transaction confirmed flag must be set for the account/transaction |
+| **Outcomes** | Approved : The transaction is logged and sent to staff Declined : Invaild information try again |
+| **Guarantees** | A temp log is put in place in the databse and updated with the correct information if the log works |
+| **Notes** | If the call to log can't log within 1 minute staff is flagged |
+
+``` python
+cardReader(transactionID: TransID, card: Card, pin: Pin,  Customer_name: Name,) -> sentToBankGateway
+```
+
+| Row | Meaning |
+|---|---|
+| **Purpose** | Reads the card |
+| **Requires** | The machine needs to have a vaild transcation ID before paymen |
+| **Outcomes** | Approved : The customer is charged and payment is confirmed  Declined : Invaild information try again  OR Payment failed try again? |
+| **Guarantees** | Pin is not saved |
+| **Notes** | Pin not saved, information about the card wiped as soon as possible |
+
+``` python
+bikeQuery(transactionID: TransID, Customer_name: Name, bikeModels: Model, price: Price) -> Requested Bike Page
+```
+
+| Row | Meaning |
+|---|---|
+| **Purpose** | Searches the list for a bike model |
+| **Requires** | Bike catalog must be up to date|
+| **Outcomes** |Approved : The page shows the requested model Declined : Retry the search once ? |
+| **Guarantees** | The bike catalog is up to date before the search calls   |
+| **Notes** | Calls update bike catalog and auto retries once |
+
+
+## Invariants 
+- Bike is only given when the transaction is confirmed 
+- No bike has two overlapping active reservations.
+- Every captured payment has exactly one transaction-log entry.
+- Customers pins are secured and always wiped
+- A bike in maintenance cannot be reserved for that window.
+-  Kisosk can accommodate any type of customer needs
+
+## Failure Modes
+
+| # | Failure | Detection | Response | Customer Sees |
+|---|---|---|---|---|
+| 1 | Card unreadable or unsupported | `awaitCard` returns **Unreadable** or **Unsupported** | Eject card. No transaction is created. | Card could not be read |
+| 2 |  Third Party Gateway  | Failure to connect to thirdparty gateway API | Retry once in 5 seconds then in another 30 seconds if the retry fails | Third Party Gateway down Please report to front desk | 
+| 3 | Wifi Loss | Wifi-status returns false | Wait 45 seconds for wifi to try and reconnected alert staff | Wifi lost transcation canceled staff is coming! |
+| 4 | Kisosk drive fails| Unscheduled restarts/data differs from earlier scan | Disables the kisok | If card in unlock card 
+
 
 
 
